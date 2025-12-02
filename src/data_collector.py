@@ -24,7 +24,8 @@ except ImportError:
 
 from config import (
     QUERY_TERMS, SUBREDDITS, DATE_CONFIG,
-    ARCTIC_SHIFT_POSTS_ENDPOINT, REQUEST_DELAY, MAX_RETRIES
+    ARCTIC_SHIFT_POSTS_ENDPOINT, ARCTIC_SHIFT_COMMENTS_ENDPOINT,
+    REQUEST_DELAY, MAX_RETRIES
 )
 
 
@@ -38,6 +39,7 @@ class ArcticShiftCollector:
 
     def __init__(self):
         self.base_url = "https://arctic-shift.photon-reddit.com/api/posts/search"
+        self.comments_url = "https://arctic-shift.photon-reddit.com/api/comments/search"
         self.session = requests.Session()
 
     def search_posts(
@@ -141,6 +143,191 @@ class ArcticShiftCollector:
         pbar.close()
         print(f"\nCollected {len(all_posts)} unique posts from Arctic Shift")
         return all_posts
+
+    def get_comments_for_post(
+        self,
+        link_id: str,
+        limit: int = 100
+    ) -> list:
+        """
+        Get comments for a specific post using link_id
+
+        Args:
+            link_id: The post ID (e.g., 't3_abc123' or just 'abc123')
+            limit: Max comments to retrieve
+
+        Returns:
+            List of comment dictionaries
+        """
+        # Remove t3_ prefix if present (API requires raw ID)
+        if link_id.startswith('t3_'):
+            link_id = link_id[3:]
+
+        params = {
+            "link_id": link_id,
+            "limit": limit,
+            "sort": "desc"  # Newest first (API only supports asc/desc)
+        }
+
+        for attempt in range(MAX_RETRIES):
+            try:
+                response = self.session.get(self.comments_url, params=params, timeout=30)
+                response.raise_for_status()
+                data = response.json()
+                return data.get("data", [])
+            except requests.exceptions.RequestException as e:
+                print(f"Attempt {attempt + 1} failed for {link_id}: {e}")
+                if attempt < MAX_RETRIES - 1:
+                    time.sleep(REQUEST_DELAY * 2)
+                else:
+                    return []
+
+    def collect_comments_for_posts(
+        self,
+        posts: list,
+        comments_per_post: int = 50,
+        max_posts: int = None
+    ) -> list:
+        """
+        Collect comments for a list of posts
+
+        Args:
+            posts: List of post dictionaries (must have 'id' field)
+            comments_per_post: Max comments per post
+            max_posts: Limit number of posts to process (None = all)
+
+        Returns:
+            List of all collected comments
+        """
+        all_comments = []
+        seen_ids = set()
+
+        posts_to_process = posts[:max_posts] if max_posts else posts
+        pbar = tqdm(total=len(posts_to_process), desc="Collecting Comments")
+
+        for post in posts_to_process:
+            post_id = post.get("id")
+            if not post_id:
+                pbar.update(1)
+                continue
+
+            comments = self.get_comments_for_post(post_id, limit=comments_per_post)
+
+            for comment in comments:
+                comment_id = comment.get("id")
+                if comment_id and comment_id not in seen_ids:
+                    seen_ids.add(comment_id)
+                    comment["post_id"] = post_id
+                    comment["post_title"] = post.get("title", "")
+                    comment["source"] = "arctic_shift"
+                    all_comments.append(comment)
+
+            pbar.update(1)
+            time.sleep(REQUEST_DELAY)
+
+        pbar.close()
+        print(f"\nCollected {len(all_comments)} unique comments from {len(posts_to_process)} posts")
+        return all_comments
+
+    def search_comments(
+        self,
+        body_query: str,
+        subreddit: str,
+        after: str,
+        before: str,
+        limit: int = 100
+    ) -> list:
+        """
+        Search comments by body text
+
+        Args:
+            body_query: Search term for comment body
+            subreddit: Target subreddit
+            after: Start date (YYYY-MM-DD)
+            before: End date (YYYY-MM-DD)
+            limit: Max results
+
+        Returns:
+            List of comment dictionaries
+        """
+        params = {
+            "subreddit": subreddit,
+            "body": body_query,
+            "after": after,
+            "before": before,
+            "limit": limit,
+            "sort": "desc"
+        }
+
+        for attempt in range(MAX_RETRIES):
+            try:
+                response = self.session.get(self.comments_url, params=params, timeout=30)
+                response.raise_for_status()
+                data = response.json()
+                return data.get("data", [])
+            except requests.exceptions.RequestException as e:
+                print(f"Attempt {attempt + 1} failed: {e}")
+                if attempt < MAX_RETRIES - 1:
+                    time.sleep(REQUEST_DELAY * 2)
+                else:
+                    return []
+
+    def collect_all_comments(
+        self,
+        queries: list = None,
+        subreddits: list = None,
+        after: str = None,
+        before: str = None,
+        limit_per_query: int = 100
+    ) -> list:
+        """
+        Collect comments for all query-subreddit combinations (by body search)
+
+        Args:
+            queries: List of search terms
+            subreddits: List of subreddits
+            after: Start date
+            before: End date
+            limit_per_query: Max comments per query
+
+        Returns:
+            List of all collected comments
+        """
+        queries = queries or QUERY_TERMS
+        subreddits = subreddits or SUBREDDITS
+        after = after or DATE_CONFIG["arctic_shift"]["start"]
+        before = before or DATE_CONFIG["arctic_shift"]["end"]
+
+        all_comments = []
+        seen_ids = set()
+
+        total_combinations = len(queries) * len(subreddits)
+        pbar = tqdm(total=total_combinations, desc="Arctic Shift Comments")
+
+        for subreddit in subreddits:
+            for query in queries:
+                comments = self.search_comments(
+                    body_query=query,
+                    subreddit=subreddit,
+                    after=after,
+                    before=before,
+                    limit=limit_per_query
+                )
+
+                for comment in comments:
+                    comment_id = comment.get("id")
+                    if comment_id and comment_id not in seen_ids:
+                        seen_ids.add(comment_id)
+                        comment["source"] = "arctic_shift"
+                        comment["query_term"] = query
+                        all_comments.append(comment)
+
+                pbar.update(1)
+                time.sleep(REQUEST_DELAY)
+
+        pbar.close()
+        print(f"\nCollected {len(all_comments)} unique comments from Arctic Shift")
+        return all_comments
 
 
 class PRAWCollector:
