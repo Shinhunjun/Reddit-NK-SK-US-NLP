@@ -48,6 +48,19 @@ This project analyzes U.S. public perception of North Korea, the U.S.-ROK allian
 | r/geopolitics | International relations analysis | 875 |
 | r/AskAnAmerican | Q&A with Americans | 199 |
 
+### Data Access
+
+Raw and processed data files are available on Google Drive:
+
+**[Download Dataset](https://drive.google.com/drive/folders/1LDcj3RzOh04PVBVzRO7cJAIHS5Gcafjb?usp=sharing)**
+
+| File | Size | Description |
+|------|------|-------------|
+| `reddit_comments_linked.json` | 154MB | Raw comment data (88,891 comments) |
+| `comments_bert_sentiment.csv` | 67MB | Comment sentiment analysis results |
+| `reddit_posts_combined.json` | 33MB | Raw post data (10,442 posts) |
+| `comments_bertopic.csv` | 29MB | Comment topic modeling results |
+
 ---
 
 ## Analysis Results

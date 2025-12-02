@@ -9,9 +9,9 @@ __pycache__/
 *.egg-info/
 .eggs/
 
-# Data (large files)
-data/raw/*.json
-data/raw/*.csv
+# Data (large files - available on Google Drive)
+data/raw/
+data/processed/
 *.pkl
 
 # Jupyter
