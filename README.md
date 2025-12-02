@@ -163,6 +163,20 @@ This project analyzes U.S. public perception of North Korea, the U.S.-ROK allian
 
 ### 5. STM (Structural Topic Modeling)
 
+**7 topics discovered** using LDA-based Structural Topic Modeling with document covariates.
+
+#### STM Topics
+| Topic | Top Keywords | Interpretation |
+|-------|--------------|----------------|
+| **Topic 0** | kim, korean, jong, kim jong, war, korean war, peninsula | Korean War & Kim Dynasty |
+| **Topic 1** | pyongyang, korea, dprk, like, life, know | Daily Life in NK |
+| **Topic 2** | china, dprk, chinese, news, park, propaganda, border | China-NK Relations |
+| **Topic 3** | time, year, years, japanese, history, moon, food | Historical & Humanitarian |
+| **Topic 4** | korean, south korean, nk, people, government, american | South Korea Politics |
+| **Topic 5** | korea, nuclear, missile, missiles, test, launch, weapons | Nuclear/Missile Program |
+| **Topic 6** | korea, south, north, nuclear, japan, trump, united | Diplomacy & US Policy |
+
+#### Temporal Topic Evolution
 ![STM Temporal](outputs/figures/stm_temporal_topics.png)
 
 #### Topic Correlation
