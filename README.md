@@ -280,16 +280,94 @@ SOUTH KOREA ──[hosts]──> US TROOPS
 | **2** | **Korean Peninsula Dynamics** | **9.0** | NK-SK relations, China, US influence |
 | 3 | Travis King Incident | 7.5 | US soldier, Military tensions |
 
-#### Query Examples
+#### GraphRAG vs Vector RAG Comparison
 
-**Global Query**: "What are the main themes in Reddit discussions about North Korea?"
-- Authoritarian governance and nuclear ambitions
-- International relations and diplomacy
-- Historical context and ongoing tensions
-- Impact of international sanctions
+We compared three query methods using the same question: **"What is the relationship between North Korea and the United States?"**
 
-**Local Query**: "Who is Kim Jong-Un?"
-- Returns structured information about leadership, nuclear program, Trump summits, Biden warnings
+| Method | Type | Data Source | Characteristics |
+|--------|------|-------------|-----------------|
+| **Global Search** | GraphRAG | Community Reports | Structured, thematic overview |
+| **Local Search** | GraphRAG | Entity + Relationships | Entity-centered, relationship-focused |
+| **Basic Search** | Vector RAG | Text Chunks (Embedding Similarity) | Raw text details, source-heavy |
+
+---
+
+##### Global Search Response (GraphRAG)
+
+> The relationship between North Korea and the United States is characterized by **deep-seated tensions, diplomatic challenges, and ongoing security concerns**. This analysis draws on various community reports to provide a comprehensive understanding of the multifaceted dynamics at play.
+>
+> **Military Tensions and Security Concerns**
+> The presence of U.S. troops in South Korea remains a critical issue in the North Korea-U.S. relationship. North Korea views this military presence as a significant threat, which exacerbates tensions between the two nations. This sentiment is reflected in the broader geopolitical dynamics of the Korean Peninsula, where North Korea's actions, including missile tests and military provocations, are often seen as responses to perceived U.S. aggression [Data: Reports (1, 2)].
+>
+> **Sanctions and Human Rights**
+> The United States has implemented various sanctions against North Korea, primarily targeting its nuclear and missile programs. These sanctions also address broader concerns about human rights abuses within the country. The U.S. stance on these issues reflects a commitment to curbing North Korea's nuclear ambitions while also highlighting the humanitarian concerns associated with the regime [Data: Reports (1, 3)].
+>
+> **Incidents Affecting Relations**
+> Recent incidents, such as the case of Travis King, have further complicated the relationship. King's defection to North Korea and subsequent return to the U.S. underscored the unpredictable nature of individual actions in the context of international relations. This incident highlighted the ongoing tensions and the potential for sudden developments that can impact diplomatic efforts [Data: Reports (3)].
+>
+> **Diplomatic Engagement and Challenges**
+> The potential for diplomatic engagement between North Korea and the U States has been a recurring theme, though it remains fraught with challenges. Historical summits, such as those between former President Trump and Kim Jong-un, have attempted to address nuclear disarmament but have often ended without significant progress. The failure to reach substantial agreements reflects the deep mistrust and differing priorities between the two nations [Data: Reports (1, 2)].
+>
+> **Conclusion**
+> In summary, the relationship between North Korea and the United States is marked by military tensions, economic sanctions, and sporadic diplomatic engagements. The interplay of these factors continues to shape the dynamics of this complex relationship, with both nations navigating a landscape of mutual distrust and strategic calculations.
+
+---
+
+##### Local Search Response (GraphRAG)
+
+> The relationship between North Korea and the United States is characterized by a complex interplay of diplomatic efforts, military tensions, and geopolitical maneuvering. Here is a detailed analysis based on the available data:
+>
+> **Historical Context and Diplomatic Efforts**
+> The relationship has been marked by periods of tension and attempts at diplomacy. Notably, former U.S. President Donald Trump engaged in unprecedented diplomatic efforts with North Korean leader Kim Jong-un, including historic summits aimed at denuclearization. These summits, such as the one in Singapore in June 2018, marked a significant shift in U.S.-North Korea relations, although they did not result in a comprehensive agreement on denuclearization [Data: Entities (2, 39); Relationships (6, 20, 23)].
+>
+> **Military Tensions**
+> Military tensions remain a significant aspect of the U.S.-North Korea relationship. The presence of U.S. troops in South Korea is a point of contention for North Korea, which views this military presence as a threat. Additionally, North Korea's development of nuclear weapons and ballistic missiles, including ICBMs, has been a major source of concern for the United States and its allies [Data: Entities (16, 17); Relationships (2)].
+>
+> **Geopolitical Dynamics**
+> The geopolitical dynamics involving North Korea and the United States are influenced by other regional powers, particularly China and Russia. China has historically been a key ally of North Korea, providing economic and political support. Meanwhile, Russia's involvement in the region, including meetings between Kim Jong-un and Russian President Vladimir Putin, adds another layer of complexity to the U.S.-North Korea relationship [Data: Entities (31); Relationships (13, 14, 15)].
+>
+> **Recent Developments**
+> Recent developments include warnings from the Biden administration regarding North Korea's nuclear and missile tests. The U.S. has continued to impose sanctions on North Korea in response to its weapons programs, while also calling for diplomatic solutions to the ongoing tensions [Data: Relationships (21)].
+>
+> **Conclusion**
+> In summary, the U.S.-North Korea relationship is defined by a history of diplomatic engagements, ongoing military tensions, and the influence of regional powers. While there have been attempts at dialogue and diplomacy, significant challenges remain in achieving lasting peace and denuclearization on the Korean Peninsula.
+
+---
+
+##### Basic Search Response (Vector RAG)
+
+> The relationship between North Korea and the United States is characterized by **deep-seated hostility, intermittent diplomatic efforts, and ongoing security tensions** that have persisted since the Korean War.
+>
+> **Historical Foundation of Tensions**
+> The fundamental tension stems from the unresolved Korean War (1950-1953). As one source notes regarding Americans' collective memory of the Korean War, there's significant debate about its place in national consciousness. Some argue it was "a righteous war" - a view that shaped subsequent U.S. policy toward North Korea for decades [Source: 1].
+>
+> **Nuclear and Missile Programs**
+> North Korea's development of nuclear weapons and ballistic missiles represents the most critical flashpoint in the relationship. Reddit discussions reveal ongoing concern about the regime's capabilities, with users noting that North Korea has conducted multiple nuclear tests and developed ICBMs capable of reaching the continental United States [Sources: 2, 3, 4].
+>
+> **Diplomatic Attempts**
+> The Trump administration's engagement with Kim Jong-un represented a dramatic shift in approach, with historic summits in Singapore (2018) and Hanoi (2019). However, these efforts ultimately failed to produce denuclearization agreements, leaving the fundamental issues unresolved [Source: 5].
+>
+> **Sanctions Regime**
+> The U.S. maintains comprehensive sanctions against North Korea targeting its weapons programs. Reddit discussions highlight how these sanctions have failed to halt nuclear development while contributing to humanitarian concerns within the country [Sources: 6, 7].
+>
+> **Cyber Activities**
+> A notable dimension of the relationship involves North Korea's cyber operations. Sources indicate that North Korea has engaged in extensive cryptocurrency theft and hacking activities, allegedly stealing billions to fund its weapons programs - creating a new vector of conflict with the United States [Source: 8].
+>
+> **Current State**
+> Under the Biden administration, relations remain frozen with no active diplomatic track. North Korea continues missile testing while the U.S. maintains its sanctions and military presence in South Korea, perpetuating the decades-long standoff.
+
+---
+
+##### Key Differences Summary
+
+| Aspect | Global Search (GraphRAG) | Local Search (GraphRAG) | Basic Search (Vector RAG) |
+|--------|-------------------------|------------------------|--------------------------|
+| **Structure** | Thematic sections with community report citations | Entity-relationship focused with specific data citations | Source-based narrative |
+| **Strength** | Big-picture overview, policy implications | Specific actors and their connections | Detailed factual content from original text |
+| **Citations** | Reports (1, 2, 3) - Community summaries | Entities (2, 39), Relationships (6, 20) - Graph nodes | Sources (1-8) - Raw text chunks |
+| **Best For** | Understanding themes and patterns | Tracking specific people/organizations | Finding specific quotes and details |
+
+**Insight**: GraphRAG excels at providing structured, relationship-aware answers while Vector RAG provides richer textual details. For complex geopolitical analysis, combining both approaches yields the most comprehensive understanding.
 
 ---
 
