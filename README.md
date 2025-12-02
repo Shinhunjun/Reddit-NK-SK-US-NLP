@@ -208,7 +208,92 @@ Raw and processed data files are available on Google Drive:
 
 ---
 
-### 5. STM (Structural Topic Modeling)
+### 5. GraphRAG - Knowledge Graph Analysis
+
+[Microsoft GraphRAG](https://github.com/microsoft/graphrag) was used to automatically extract a knowledge graph from Reddit discourse, enabling structured querying of entities, relationships, and thematic communities.
+
+#### How GraphRAG Works
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        GraphRAG Pipeline                            │
+├─────────────────────────────────────────────────────────────────────┤
+│  1. Text Chunking                                                   │
+│     └── Split documents into analyzable text units                  │
+│                                                                     │
+│  2. Entity & Relationship Extraction (LLM)                          │
+│     └── GPT extracts: PERSON, GEO, ORGANIZATION, EVENT              │
+│     └── GPT identifies relationships between entities               │
+│                                                                     │
+│  3. Graph Construction                                              │
+│     └── Nodes = Entities (with descriptions)                        │
+│     └── Edges = Relationships (with weights)                        │
+│                                                                     │
+│  4. Community Detection (Leiden Algorithm)                          │
+│     └── Cluster nodes by modularity (connection density)            │
+│     └── Hierarchical community structure                            │
+│                                                                     │
+│  5. Community Summarization (LLM)                                   │
+│     └── Generate reports for each community                         │
+│                                                                     │
+│  6. Query Processing                                                │
+│     └── Global: Aggregate community reports                         │
+│     └── Local: Entity-specific context retrieval                    │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+#### Extracted Knowledge Graph (100 posts sample)
+
+| Component | Count | Description |
+|-----------|-------|-------------|
+| **Entities** | 58 | People, places, organizations, events |
+| **Relationships** | 53 | Connections between entities |
+| **Communities** | 4 | Thematic clusters |
+
+#### Top Entities by Connectivity (Degree)
+
+| Entity | Type | Connections | Role |
+|--------|------|-------------|------|
+| **NORTH KOREA** | GEO | 29 | Central node |
+| KIM JONG UN | PERSON | 7 | Supreme Leader |
+| SOUTH KOREA | GEO | 4 | Key counterpart |
+| PUTIN | PERSON | 3 | Russia relations |
+| TRUMP | PERSON | 2 | US diplomacy |
+
+#### Key Relationships Extracted
+
+```
+TRUMP ──[direct summit diplomacy]──> KIM JONG-UN
+KIM JONG-UN ──[supreme leader of]──> NORTH KOREA
+KIM JONG-UN ──[strategic meetings]──> PUTIN
+NORTH KOREA ──[divided nation]──> SOUTH KOREA
+NORTH KOREA ──[opposes deployment]──> THAAD
+SOUTH KOREA ──[hosts]──> US TROOPS
+```
+
+#### Community Structure
+
+| Community | Title | Rank | Key Entities |
+|-----------|-------|------|--------------|
+| 0 | North Korea and Global Leaders | 8.5 | Kim Jong Un, Putin, Park Geun-hye |
+| 1 | NK-US Diplomatic Relations | 8.5 | Trump, Russia, Nuclear talks |
+| **2** | **Korean Peninsula Dynamics** | **9.0** | NK-SK relations, China, US influence |
+| 3 | Travis King Incident | 7.5 | US soldier, Military tensions |
+
+#### Query Examples
+
+**Global Query**: "What are the main themes in Reddit discussions about North Korea?"
+- Authoritarian governance and nuclear ambitions
+- International relations and diplomacy
+- Historical context and ongoing tensions
+- Impact of international sanctions
+
+**Local Query**: "Who is Kim Jong-Un?"
+- Returns structured information about leadership, nuclear program, Trump summits, Biden warnings
+
+---
+
+### 6. STM (Structural Topic Modeling)
 
 **7 topics discovered** using LDA-based Structural Topic Modeling with document covariates.
 
@@ -240,6 +325,7 @@ Raw and processed data files are available on Google Drive:
 | Topic Embedding | all-MiniLM-L6-v2 | 22M |
 | Topic Modeling | BERTopic | UMAP + HDBSCAN |
 | STM | LDA | 7 topics |
+| Knowledge Graph | GraphRAG + GPT-4o-mini | Entity extraction + Leiden clustering |
 
 ### Hardware
 - Apple M4 Pro (MPS acceleration)
@@ -260,6 +346,14 @@ reddit_US_NK/
 │   └── processed/              # Processed CSV
 │       ├── posts_final.csv
 │       └── posts_final_bert_sentiment.csv
+├── graphrag_test/              # GraphRAG knowledge graph
+│   ├── input/                  # Input text files
+│   ├── output/                 # Generated graph data
+│   │   ├── entities.parquet    # Extracted entities
+│   │   ├── relationships.parquet
+│   │   ├── communities.parquet
+│   │   └── community_reports.parquet
+│   └── settings.yaml           # GraphRAG configuration
 ├── outputs/
 │   └── figures/                # Visualizations
 │       ├── bert_sentiment_*.png
@@ -372,6 +466,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 - [PRAW](https://praw.readthedocs.io/) - Reddit API wrapper
 - [BERTopic](https://maartengr.github.io/BERTopic/) - Topic modeling
 - [HuggingFace Transformers](https://huggingface.co/) - BERT sentiment
+- [Microsoft GraphRAG](https://github.com/microsoft/graphrag) - Knowledge graph extraction
 
 ---
 
