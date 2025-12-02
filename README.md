@@ -97,7 +97,41 @@ This project analyzes U.S. public perception of North Korea, the U.S.-ROK allian
 
 ---
 
-### 2. BERTopic (Topic Modeling)
+### 2. Comment Analysis (83,300 comments)
+
+#### Comment Sentiment by Era
+| Era | Mean Score | Negative % | Comments |
+|-----|------------|------------|----------|
+| Trump (2017-2020) | -0.474 | 73.9% | 22,315 |
+| Obama 2nd (2013-2016) | -0.460 | 73.3% | 19,937 |
+| Biden (2021-2023) | -0.452 | 72.9% | 32,126 |
+| Obama 1st (2009-2012) | -0.432 | 71.8% | 8,922 |
+
+**Key Finding**: Comments are more negative than posts (mean -0.457 vs -0.32)
+
+#### Comment BERTopic Analysis
+**274 topics discovered** from 83,300 comments using BERTopic (min_cluster_size=30)
+
+##### Top Topics by Sentiment
+| Topic | Sentiment | Neg% | Keywords | Interpretation |
+|-------|-----------|------|----------|----------------|
+| 3 | **-0.767** | 89.3% | tax, money, currency | Economic Criticism |
+| 12 | **-0.765** | 89.3% | food, starving, famine | Humanitarian Crisis |
+| 9 | **-0.741** | 87.3% | missile, icbm, defense | Missile Threats |
+| 2 | -0.736 | 86.7% | nukes, nuclear, weapons | Nuclear Weapons |
+| 1 | -0.586 | 80.7% | nukes, nuclear, weapons | Nuclear Discussion |
+| 0 | -0.569 | 78.7% | china, chinese, ccp | China Relations |
+| 16 | -0.555 | 78.0% | moon, moon jae, president | SK Politics |
+| 4 | -0.220 | 61.3% | city, buildings, tours | Tourism |
+| 18 | **+0.706** | 14.7% | thanks, sharing | Gratitude (only positive) |
+
+#### Interactive Comment Visualizations
+- [Comment Topic Hierarchy](outputs/figures/comments_bertopic_hierarchy.html)
+- [Comment Topic Barchart](outputs/figures/comments_bertopic_barchart.html)
+
+---
+
+### 3. BERTopic - Posts (Topic Modeling)
 
 **59 topics discovered** using BERTopic with all-MiniLM-L6-v2 embeddings.
 
