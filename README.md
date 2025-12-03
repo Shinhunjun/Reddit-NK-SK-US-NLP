@@ -242,43 +242,70 @@ Raw and processed data files are available on Google Drive:
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-#### Extracted Knowledge Graph (100 posts sample)
+#### Extracted Knowledge Graph (Full Dataset: 10,442 posts)
 
 | Component | Count | Description |
 |-----------|-------|-------------|
-| **Entities** | 58 | People, places, organizations, events |
-| **Relationships** | 53 | Connections between entities |
-| **Communities** | 4 | Thematic clusters |
+| **Entities** | 3,051 | People, places, organizations, events |
+| **Relationships** | 4,215 | Connections between entities |
+| **Communities** | 295 | Thematic clusters (4 hierarchy levels) |
+| **Text Units** | 723 | Processed document chunks |
 
-#### Top Entities by Connectivity (Degree)
+#### Entity Type Distribution
+
+| Type | Count | Percentage |
+|------|-------|------------|
+| EVENT | 1,034 | 33.9% |
+| ORGANIZATION | 739 | 24.2% |
+| PERSON | 664 | 21.8% |
+| GEO | 405 | 13.3% |
+
+#### Top 15 Entities by Connectivity
 
 | Entity | Type | Connections | Role |
 |--------|------|-------------|------|
-| **NORTH KOREA** | GEO | 29 | Central node |
-| KIM JONG UN | PERSON | 7 | Supreme Leader |
-| SOUTH KOREA | GEO | 4 | Key counterpart |
-| PUTIN | PERSON | 3 | Russia relations |
-| TRUMP | PERSON | 2 | US diplomacy |
+| **NORTH KOREA** | - | 1,157 | Central hub |
+| **SOUTH KOREA** | ORG | 662 | Key counterpart |
+| **KIM JONG UN** | PERSON | 304 | Supreme Leader |
+| KOREAN WAR | EVENT | 189 | Historical context |
+| DPRK | ORG | 152 | Official name |
+| PYONGYANG | GEO | 108 | Capital city |
+| KOREAN PENINSULA | GEO | 78 | Geographic focus |
+| JAPAN | GEO | 56 | Regional ally |
+| CHINA | ORG | 52 | Key player |
+| RUSSIA | GEO | 38 | Strategic partner |
+| SEOUL | GEO | 35 | SK capital |
 
 #### Key Relationships Extracted
 
-```
-TRUMP ──[direct summit diplomacy]──> KIM JONG-UN
-KIM JONG-UN ──[supreme leader of]──> NORTH KOREA
-KIM JONG-UN ──[strategic meetings]──> PUTIN
-NORTH KOREA ──[divided nation]──> SOUTH KOREA
-NORTH KOREA ──[opposes deployment]──> THAAD
-SOUTH KOREA ──[hosts]──> US TROOPS
-```
+| Relationship | Weight |
+|--------------|--------|
+| DPRK → SOUTH KOREA | 104 |
+| KOREAN WAR → KOREAN PENINSULA | 101 |
+| NORTH KOREA → KOREAN PENINSULA | 86 |
+| SOUTH KOREA → KOREAN PENINSULA | 63 |
+| KIM JONG-IL → DPRK | 36 |
 
-#### Community Structure
+#### Community Hierarchy (295 Communities)
 
-| Community | Title | Rank | Key Entities |
-|-----------|-------|------|--------------|
-| 0 | North Korea and Global Leaders | 8.5 | Kim Jong Un, Putin, Park Geun-hye |
-| 1 | NK-US Diplomatic Relations | 8.5 | Trump, Russia, Nuclear talks |
-| **2** | **Korean Peninsula Dynamics** | **9.0** | NK-SK relations, China, US influence |
-| 3 | Travis King Incident | 7.5 | US soldier, Military tensions |
+| Level | Count | Description |
+|-------|-------|-------------|
+| Level 0 | 50 | Fine-grained topics |
+| Level 1 | 145 | Mid-level themes |
+| Level 2 | 93 | Broad categories |
+| Level 3 | 7 | Top-level mega-communities |
+
+#### Top 7 Communities (Level 3 - Highest)
+
+| Community | Rank |
+|-----------|------|
+| **North Korea: Kim Jong Un and Military Dynamics** | 9.0 |
+| United States and North Korea Relations | 8.5 |
+| Korean War and Its Global Impact | 8.5 |
+| Hwasong-18 and ICBM Launch Community | 8.5 |
+| Korean Families and Higher-Level Talks | 8.0 |
+| U.S. Aid and North Korea's Nuclear Moratorium | 7.5 |
+| Lt. Col. AG Rangraj and ROK Soldiers in the Korean War | 6.0 |
 
 #### GraphRAG vs Vector RAG Comparison
 
