@@ -535,6 +535,22 @@ pip install torch torchvision torchaudio
 
 ---
 
+## Related Research
+
+### Coercive Diplomacy Analysis (2017-2019)
+
+A focused study examining the impact of North Korea's coercive diplomacy strategy on U.S. public opinion has been conducted using this dataset:
+
+📄 **[NK Coercive Diplomacy Reddit Analysis](https://github.com/Shinhunjun/nk-coercive-diplomacy-reddit)**
+
+This research analyzes the transition from maximum tension (2017: nuclear tests, ICBMs, "Fire and Fury") to diplomatic engagement (2018-2019: Singapore/Hanoi Summits) and includes:
+- **BERT Sentiment Analysis**: Sentiment improved +0.230 (p < 0.001)
+- **LLM Framing Classification**: THREAT frame -29.3%, DIPLOMACY +22.7%
+- **ITS Causal Inference**: Summit announcement caused immediate effect (p = 0.044)
+- **GraphRAG Knowledge Graph**: Kim Jong Un's network shifted from military to diplomatic
+
+---
+
 ## Research Applications
 
 This framework can be adapted for:
@@ -542,20 +558,6 @@ This framework can be adapted for:
 - **Public opinion tracking** around security events
 - **Cross-platform narrative comparison**
 - **Event-driven sentiment analysis**
-
----
-
-## Citation
-
-```bibtex
-@misc{reddit_us_nk_analysis,
-  author = {Jun Sin},
-  title = {Reddit Discourse on North Korea and US-ROK Alliance: 15-Year Analysis},
-  year = {2024},
-  publisher = {GitHub},
-  url = {https://github.com/yourusername/reddit_US_NK}
-}
-```
 
 ---
 
@@ -574,5 +576,3 @@ MIT License - see [LICENSE](LICENSE) for details.
 - [Microsoft GraphRAG](https://github.com/microsoft/graphrag) - Knowledge graph extraction
 
 ---
-
-*Created as part of research preparation for collaboration with Professor Mohit Singhal, UT Austin.*
